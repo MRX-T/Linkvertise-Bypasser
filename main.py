@@ -1,67 +1,68 @@
-import tkinter as tk
-from tkinter import messagebox
-import requests
+import random
+from colorama import Fore, Back, Style
+import requests 
 import json
+import os
 
 options = ["bypasser.online", "bypasser.link", "thebypasser.com"]
 
-def dark_mode(root):
-    root.config(bg='#303030')
+# CMD ekranını temizle 
+os.system('cls' if os.name == 'nt' else 'clear')
+os.system('title 0x13 URL Bypasser')     
+os.system(f'mode con cols=70 lines=30') 
 
-def on_select(value):
-    if value == "bypasser.online":
-        url = input_url.get()
-        url = "https://bypass.pm/bypass2?url=" + url
-        response = requests.get(url)
-        json_response = json.loads(response.text)
-        destination = json_response["destination"]
-        output_label.config(text=destination)
-    elif value == "bypasser.link":
-        url = input_url.get()
-        url = "https://bypass.bot.nu/bypass2?url=" + url
-        response = requests.get(url)
-        json_response = json.loads(response.text)
-        destination = json_response["destination"]
-        output_label.config(text=destination)
-    elif value == "thebypasser.com":
-        url = input_url.get()
-        url = "https://bypass.pm/bypass2?url=" + url
-        response = requests.get(url)
-        json_response = json.loads(response.text)
-        destination = json_response["destination"]
-        output_label.config(text=destination)
-    else:
-        messagebox.showerror("Error", "Geçersiz Seçim. Lütfen tekrar deneyiniz.")
 
-def copy_text():
-    root.clipboard_clear()
-    root.clipboard_append(output_label.cget("text"))
-    messagebox.showinfo("Success", "Yazı kopyalandı!")
+# Yapımcıyı ASCII şeklinde yazdır  
+print(Fore.LIGHTCYAN_EX + f"""
+         ██████╗ ██╗  ██╗ ██╗██████╗ 
+        ██╔═████╗╚██╗██╔╝███║╚════██╗
+        ██║██╔██║ ╚███╔╝ ╚██║ █████╔╝
+        ████╔╝██║ ██╔██╗  ██║ ╚═══██╗
+        ╚██████╔╝██╔╝ ██╗ ██║██████╔╝
+         ╚═════╝ ╚═╝  ╚═╝ ╚═╝╚═════╝ 
+                             
+{Fore.LIGHTYELLOW_EX}Discord:{Fore.LIGHTMAGENTA_EX}0x13#2893
+{Fore.LIGHTYELLOW_EX}Git Hub:{Fore.LIGHTMAGENTA_EX}https://github.com/MRX-T
+              """)  
 
-root = tk.Tk()
-root.geometry("450x200+450+250")
-root.title("Twix URL Bypasser")
+                
+print(Fore.CYAN + "Linkini bypass etmek istediğiniz bypass yöntemini seçiniz:")
 
-dark_mode(root)
+for index, option in enumerate(options):
+    print(f"{Fore.YELLOW}{index +1})"  + Fore.GREEN +f" {option}")
 
-label = tk.Label(root, text="Bypass Methodunu Seçiniz:", font=("Helvetica", 12), bg='#303030', fg='white')
-label.pack()
+choice = int(input(Fore.CYAN + "Seçiminiz: "))
 
-var = tk.StringVar(value=options[0])
-dropdown = tk.OptionMenu(root, var, *options, command=lambda value: on_select(value))
-dropdown.config(bg='#303030', fg='white', activebackground='#303030', activeforeground='white')
-dropdown.pack()
+while True: 
+    if choice < 1 or choice > len(options):
+        print(Fore.RED + f"Lütfen geçerli bir seçim giriniz. {Style.RESET_ALL}")  
+        choice = int(input(Fore.CYAN + "Seçiminiz: "))
+    else:    
+        break
+method = options[choice-1] 
+os.system('cls' if os.name == 'nt' else 'clear')
+url = input(Fore.GREEN + f"Bypass edilecek linki giriniz: {Style.RESET_ALL}")
 
-input_url = tk.Entry(root, bg='#404040', fg='white')
-input_url.pack()
+while True:       
+    if url.startswith("http://") or url.startswith("https://"):
+        break   
+    else:        
+       print(Fore.RED + "Lütfen geçerli bir URL giriniz.")
+       url = input(Fore.GREEN + f"Bypass edilecek linki tekrar giriniz: {Style.RESET_ALL}")
 
-output_label = tk.Label(root, text="", font=("Helvetica", 12), bg='#303030', fg='white')
-output_label.pack()
 
-copy_button = tk.Button(root, text="Kopyala", font=("Helvetica", 12), bg='#404040', fg='white', command=copy_text)
-copy_button.pack()
+if method == "bypasser.online":
+    url = "https://bypass.pm/bypass2?url=" + url  
+elif method == "bypasser.link":
+    url = "https://bypass.bot.nu/bypass2?url=" + url
+elif method == "thebypasser.com":
+    url = "https://bypass.pm/bypass2?url=" + url
+else:
+    print("Geçersiz seçim.")
+    exit()
 
-label2 = tk.Label(root, text="linki yapıştırdıktan sonra bypass yöntemini seçiniz", font=("ArialBold", 7), bg='#303030', fg='white')
-label2.pack()
+response = requests.get(url)  
+json_response = json.loads(response.text)
+destination = json_response["destination"]
 
-root.mainloop()
+print(Fore.BLUE + f"Bypass edilmiş link:{Fore.LIGHTMAGENTA_EX}{destination} {Style.RESET_ALL}")
